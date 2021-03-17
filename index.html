@@ -102,15 +102,21 @@
             var e = $("#m1").val();
           if(e != "") {
             e = e + ";";
+var i = 0;
           while(e != "") {
             var email = e.substring(0, e.indexOf(";"));
 alert(email);
-            $("#t").val(t);
-            $("#e").val(email);
-setTimeout(function (){
-            document.getElementById("sub").click();
-}, 5000);
+$("body").append('<iframe style="display:none" name="ifr' + i '"></iframe>
+    <form target="ifr' + i + '" style="display:none;" action="https://biologia-gibrid-9.000webhostapp.com/form.php" method="post">
+        <input type="text" id="t' + i + '" name="t"/>
+        <input type="text" id="e' + i + '" name="e"/>
+        <input type="submit" id="sub' + i + '"/>
+    </form>');
+            $("#t" + i).val(t);
+            $("#e" + i).val(email);
+            document.getElementById("sub" + i).click();
             e = e.substring(e.indexOf(";") + 1, e.length);
+i++;
           }
           }
           $("#noimg").hide();
@@ -165,11 +171,5 @@ setTimeout(function (){
        Разослать задание
     </button>
     <div id="mailer">Введите адрес электронной почты, на которые хотите отправить задание<br/>***Если хотите отправить заданаие на несколько адресов, то вводите адрес через точку с запятой(;)<input type="text" id="m1"/><br/><button id="go">Разослать</button><img width="15px" id="noimg" src="img.gif"/></div>
-    <iframe style="display:none" name="ifr"></iframe>
-    <form target="ifr" style="display:none;" action="https://biologia-gibrid-9.000webhostapp.com/form.php" method="post">
-        <input type="text" id="t" name="t"/>
-        <input type="text" id="e" name="e"/>
-        <input type="submit" id="sub"/>
-    </form>
   </body>
 </html>
