@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=320, initial-scale=1">
+    <meta charset="utf-8">
+    <script src="jQuery.js" type="text/javascript"></script>
+    <style>
+      #prt {
+        display: none;
+      }
+      #tex {
+        display: none;
+      }
+      #mailer {
+         display: none;
+      }
+      #m1 {
+          width: 300px;
+      }
+      #noimg {
+        display: none;
+      }
+      .info {
+        font-size: 10px;
+      }
+    </style>
+    <script>
+      $(document).ready(function() {
+        $("#dom1").change(function() {
+          $("#dop1").remove();
+            $("#dop2").remove();
+          if($(this).val() == "полное") {
+            $("#prt").hide();
+            $("#novop").remove();
+            $("#prom1").remove();
+            $("#prom2").remove();
+            $("#dom2").after("<span id='dop1'><select><option>есть предрасположенность к рецессивному признаку</option><option>нет предрасположенности к рецессивному признаку</option></select><br/>Укажите, у мамы есть предрасположенность к рецессивному признаку, указанному вами выше.<br/></span>");
+            $("#dom3").after("<span id='dop2'><select><option>есть предрасположенность к рецессивному признаку</option><option>нет предраспложенности к рецессивному признаку</option></select><br/>Укажите, у папы есть предрасположенность к рецессивному признаку, указанному вами выше.<br/></span");
+            if($("#dom2").val() == "рециссивный признак") {
+              $("#dop1").hide();
+            }
+            if($("#dom3").val() == "рециссивный признак") {
+              $("#dop2").hide();
+            }
+          } else {
+            $("#prt").show();
+            $("#dom2").append("<option id='prom1'>промежуточный признак</option>");
+            $("#dom3").append("<option id='prom2'>промежуточный признак</option>");
+            $("#vop").append("<option id='novop'>Какова вероятность, что у них родится ребёнок с проявлением промежуточного признака?</option>")
+          }
+        });
+        $("#dom2").change(function() {
+          if($(this).val() == "доминантный признак") {
+            $("#dop1").show();
+          } else {
+            $("#dop1").hide();
+          }
+        });
+        $("#dom3").change(function() {
+          if($(this).val() == "доминантный признак") {
+            $("#dop2").show();
+          } else {
+            $("#dop2").hide();
+          }
+        });
+        $("#info").click(function() {
+          $("#tex").hide();
+        });
+        $("#but").click(function() {
+          $("#tex").show();
+          if($("#dom2").val() == "доминантный признак") {
+              var n1 = $("#pr1").val();
+          } else if($("#dom2").val() == "рецессивный признак") {
+              var n1 = $("#pr2").val();
+          } else if($("#dom2").val() == "промежуточный признак") {
+              var n1 = $("#pr3").val();
+          }
+          if(/болеет/.test(n1) == false){
+              n1 = "имеющая " + n1;
+        } else {
+            n1 = n1.replace("болеет", "болеющая");
+        }
+          $("#n1").text(n1);
+          $("#n2").text($("#dom2").val());
+          if($("#dop1").val() == "есть предрасположенность к рецессивному признаку") {
+            var dop = $("#pr2").val();
+            if(/болеет/.test(dop) == false){
+              dop = "имеет " + dop;
+            }
+              $("#n5").text(", также её отец " + dop);
+          } else {
+              $("#n5").text("");
+          }
+          if($("#dom3").val() == "доминантный признак") {
+              var n2 = $("#pr1").val();
+          } else if($("#dom3").val() == "рецессивный признак") {
+              var n2 = $("#pr2").val();
+          } else if($("#dom3").val() == "промежуточный признак") {
+              var n2 = $("#pr3").val();
+          }
+          if(/болеет/.test(n2) == false){
+              n2 = "имеющий " + n2;
+            } else {
+            n2 = n2.replace("болеет", "болеющего");
+        }
+          $("#n4").text($("#dom3").val());
+          $("#n3").text(n2);
+          if($("#dop2").val() == "есть предрасположенность к рецессивному признаку") {
+              var dop = $("#pr2").val();
+            if(/болеет/.test(dop) == false){
+              dop = "имеет" + dop;
+            }
+            $("#n5").text(", также его мать " + dop);
+          } else {
+              $("#n6").text("");
+          }
+          $("#n7").text($("#vop").val());
+        });
+        $("#go").click(function(){
+          $("#noimg").show();
+            var t = $("#tex").text();
+            var e = $("#m1").val();
+          if(e != "") {
+              var dpr = $("#pr1").val();
+              var rpr = $("#pr2").val();
+$("form").remove();
+            e = e + ";";
+var i = 0;
+          while(e != "") {
+            var email = e.substring(0, e.indexOf(";"));
+$("body").append('<iframe style="display:none" name="ifr' + i + '"></iframe><form style="display:none;" target="ifr' + i + '" action="https://biologia-gibrid-9.000webhostapp.com/form.php" method="post"><input type="text" id="t' + i + '" name="t"/><input type="text" id="e' + i + '" name="e"/><input type="submit" id="sub' + i + '"/></form>');
+            $("#t" + i).val(t);
+            $("#e" + i).val(email);
+            document.getElementById("sub" + i).click();
+            e = e.substring(e.indexOf(";") + 1, e.length);
+i++;
+          }
+          }
+          $("#noimg").hide();
+          $("#info").show();
+            $("#but").show();
+            $("#mail").show();
+            $("#mailer").hide();
+        });
+        $("#mail").click(function(){
+            $("#info").hide();
+            $("#but").hide();
+            $("#tex").hide();
+            $("#mail").hide();
+            $("#mailer").show();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="info">
+      <b>Составление задач по теме "Моногибридное скрещивание"</b><br/><br/>
+    Выберете вид доминирования: <select id="dom1">
+    <option>полное</option><option>неполное</option>
+    </select><br/><br/>
+    Введите доминантный признак: <input type="text" id="pr1"/><br/><span class="info">Например: "карий цвет глаз" или "не болеет лейкемей"</span><br/>
+    Введите рецессивный признак: <input type="text" id="pr2"/><br/><span class="info">Например: "голубой цвет глаз" или "болеет астмой"</span><br/>
+    <span id="prt">Промежуточный признак: <input type="text" id="pr3"/><br/><span class="info">Например "курчавость волос" или "укорочение фаланг пальцев"</span><br/></span>
+    Выберете признак 1-го родителя: <select id="dom2">
+    <option>доминантный признак</option><option>рецессивный признак</option>
+    </select><br/><span class="info">Укажите, признак, который несет ген мамы является рецессивным или доминантным.</span><br/>
+    <span id="dop1"><select>
+      <option id="d1">есть предрасположенность к рецессивному признаку</option><option id="d2">нет предрасположенности к рецессивному признаку</option>
+    </select><br/><span class="info">Укажите, у мамы есть предрасположенность к рецессивному признаку, указанному вами выше.</span><br/></span><br/>
+    Признак 2-го родителя: <select id="dom3">
+    <option>доминантный признак</option><option>рециссивный признак</option>
+    </select><br/><span class="info">Укажите, признак, который несет ген папы является рецессивным или доминантным.</span><br/>
+    <span id="dop2"><select>
+    <option>есть предрасположенность к рецессивному признаку</option><option>нет предраспложенности к рецессивному признаку</option>
+    </select><br/><span class="info">Укажите, у папы есть предрасположенность к рецессивному признаку, указанному вами выше.</span><br/></span><br/>
+    Укажите вопрос задачи: <select id="vop"><option>Определите отношение по генотипу у их детей.</option>
+    <option>Определите отношение по фенотипу у их детей.</option>
+    <option>Какова вероятность, что у них родится ребёнок с проявлением доминантного признака?</option>
+    <option>Какова вероятность, что у них родится ребёнок с проявлением рецессивного признака?</option>
+    </select><br/><br/>
+    </div>
+    <button id="but">
+      Посмотреть текст задачи
+    </button>
+    <div id="tex">
+      Женщина, <span id="n1"></span> (<span id="n2"></span>)<span id="n5"></span>, выходит замуж за мужчину, <span id="n3"></span> (<span id="n4"></span>)<span id="n6"></span>. <span id="n7"></span><br/><br/>
+    </div>
+    <button id="mail">
+       Сохранить изменения
+    </button>
+    <div id="mailer">Введите адрес электронной почты, на которые хотите отправить задание<br/>***Если хотите отправить заданаие на несколько адресов, то вводите адрес через точку с запятой(;)<input type="text" id="m1"/><br/><button id="go">Разослать</button><img width="15px" id="noimg" src="img.gif"/></div>
+  </body>
+</html>
