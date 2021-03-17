@@ -107,7 +107,9 @@
 alert(email);
             $("#t").val(t);
             $("#e").val(email);
+setTimeout(function (){
             document.getElementById("sub").click();
+}, 1000);
             e = e.substring(e.indexOf(";") + 1, e.length);
           }
           }
