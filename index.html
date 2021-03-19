@@ -34,8 +34,8 @@
             $("#novop").remove();
             $("#prom1").remove();
             $("#prom2").remove();
-            $("#dom2").after("<span id='dop1'><select><option>есть предрасположенность к рецессивному признаку</option><option>нет предрасположенности к рецессивному признаку</option></select><br/>Укажите, у мамы есть предрасположенность к рецессивному признаку, указанному вами выше.<br/></span>");
-            $("#dom3").after("<span id='dop2'><select><option>есть предрасположенность к рецессивному признаку</option><option>нет предраспложенности к рецессивному признаку</option></select><br/>Укажите, у папы есть предрасположенность к рецессивному признаку, указанному вами выше.<br/></span");
+            $("#info1").after("<span id='dop1'><select id='dop01'><option>есть предрасположенность к рецессивному признаку</option><option>нет предрасположенности к рецессивному признаку</option></select><br/><span style='font-size: 10px;'>Укажите, у мамы есть предрасположенность к рецессивному признаку, указанному вами выше.</span><br/></span>");
+            $("#info2").after("<span id='dop2'><select id='dop02'><option>есть предрасположенность к рецессивному признаку</option><option>нет предрасположенности к рецессивному признаку</option></select><br/><span style='font-size: 10px;'>Укажите, у мамы есть предрасположенность к рецессивному признаку, указанному вами выше.</span><br/></span>");
             if($("#dom2").val() == "рециссивный признак") {
               $("#dop1").hide();
             }
@@ -82,7 +82,7 @@
         }
           $("#n1").text(n1);
           $("#n2").text($("#dom2").val());
-          if($("#dop1").val() == "есть предрасположенность к рецессивному признаку") {
+          if($("#dop01").val() == "есть предрасположенность к рецессивному признаку") {
             var dop = $("#pr2").val();
             if(/болеет/.test(dop) == false){
               dop = "имеет " + dop;
@@ -105,7 +105,7 @@
         }
           $("#n4").text($("#dom3").val());
           $("#n3").text(n2);
-          if($("#dop2").val() == "есть предрасположенность к рецессивному признаку") {
+          if($("#dop02").val() == "есть предрасположенность к рецессивному признаку") {
               var dop = $("#pr2").val();
             if(/болеет/.test(dop) == false){
               dop = "имеет" + dop;
@@ -123,13 +123,121 @@
           if(e != "") {
               var dpr = $("#pr1").val();
               var rpr = $("#pr2").val();
+            if($("#dom2").val() == "доминантный признак") {
+              if($("#dop01").val() == "есть предрасположенность к рецессивному признаку") {
+                var p1 = "Aa";
+              } else {
+                var p1 = "AA";
+              }
+            } else if ($("#prom1").val() == "промежуточный признак") {
+                var p1 = "Aa";
+            } else {
+              var p1 = "aa";
+            }
+            if(p1 == "AA") {
+              var g1 = "A";
+            } else if(p1 == "aa") {
+              var g1 = "a";
+            } else {
+              var g1 = "A,a";
+            }
+            if($("#dom3").val() == "доминантный признак") {
+              if($("#dop02").val() == "есть предрасположенность к рецессивному признаку") {
+                var p2 = "Aa";
+              } else {
+                var p2 = "AA";
+              }
+            } else if ($("#prom2").val() == "промежуточный признак") {
+                var p2 = "Aa";
+            } else {
+              var p2 = "aa";
+            }
+            if(p2 == "AA") {
+              var g2 = "A";
+            } else if(p2 == "aa") {
+              var g2 = "a";
+            } else {
+              var g2 = "A,a";
+            }
+            var g01 = g1.match(/\w/g).join("");
+            var g02 = g2.match(/\w/g).join("");
+            var f = "";
+            for(var i = 0; i < 2; i++){
+                for(var j = 0; j < 2; j++){
+                    var n1 = g01.substring(i, i + 1);
+                    var n2 = g02.substring(j, j + 1);
+                    if(n1 == "a" && n2 == "A") {
+                        f += n2 + n1 + ",";
+                    } else if(n1 != "" && n2 != "") {
+                        f += n1 + n2 + ",";
+                    }
+                }
+            }
+            f = f.substring(0, f.length - 1);
+            var AA = "";
+            var Aa = "";
+            var aa = ""; 
+            var sum = 0;
+            if(/AA/g.test(f) == true) {
+                AA = f.match(/AA/g).join("").length / 2;
+                sum += parseInt(AA);
+                AA += ":";
+            }
+            if(/Aa/g.test(f) == true) {
+                Aa = f.match(/Aa/g).join("").length / 2;
+                sum += parseInt(Aa);
+                Aa += ":";
+            }
+            if(/aa/g.test(f) == true) {
+                aa = f.match(/aa/g).join("").length / 2;
+                sum += parseInt(aa);
+                aa += ":";
+            }
+            var gen = AA + Aa + aa;
+            gen = gen.substring(0, gen.length - 1);
+            if($("#dom1").val() == "полное"){
+                if(Aa == "") {
+                    Aa = "0";
+                }
+                if(AA == "") {
+                    AA = "0";
+                }
+                AA = parseInt(AA) + parseInt(Aa);
+                AA += ":";
+                var fen = AA + aa;
+            } else {
+                var fen = AA + Aa + aa;
+            }
+            fen = fen.substring(0, fen.length - 1);
+            if($("#vop").val() == "Определите отношение по генотипу у их детей.") {
+                var otv = gen;
+            } else if($("#vop").val() == "Определите отношение по фенотипу у их детей.") {
+                var otv = fen;
+            } else if($("#vop").val() == "Какова вероятность, что у них родится ребёнок с проявлением доминантного признака?") {
+                var otv = parseInt(AA) / parseInt(sum) * 100;
+                otv += "%";
+            } else if($("#vop").val() == "Какова вероятность, что у них родится ребёнок с проявлением рецессивного признака?") {
+                var otv = parseInt(aa) / parseInt(sum) * 100;
+                otv += "%";
+            } else if($("#vop").val() == "Какова вероятность, что у них родится ребёнок с проявлением промежуточного признака?") {
+                var otv = parseInt(Aa) / parseInt(sum) * 100;
+                otv += "%";
+            }
 $("form").remove();
             e = e + ";";
 var i = 0;
           while(e != "") {
             var email = e.substring(0, e.indexOf(";"));
-$("body").append('<iframe style="display:none" name="ifr' + i + '"></iframe><form style="display:none;" target="ifr' + i + '" action="https://biologia-gibrid-9.000webhostapp.com/form.php" method="post"><input type="text" id="t' + i + '" name="t"/><input type="text" id="e' + i + '" name="e"/><input type="submit" id="sub' + i + '"/></form>');
+$("body").append('<iframe style="display:none" name="ifr' + i + '"></iframe><form style="display:none;" target="ifr' + i + '" action="form.php" method="post"><input type="text" id="dpr' + i + '" name="dpr"/><input type="text" id="rpr' + i + '" name="rpr"/><input type="text" id="p1' + i + '" name="p1"/><input type="text" id="p2' + i + '" name="p2"/><input type="text" id="g1' + i + '" name="g1"/><input type="text" id="g2' + i + '" name="g2"/><input type="text" id="f' + i + '" name="f"/><input type="text" id="otv' + i + '" name="otv"/><input type="text" id="t' + i + '" name="t"/><input type="text" id="e' + i + '" name="e"/><input type="submit" id="sub' + i + '"/></form>');
             $("#t" + i).val(t);
+            $("#dpr" + i).val(dpr);
+            $("#rpr" + i).val(rpr);
+            $("#p1" + i).val(p1);
+            $("#p2" + i).val(p2);
+            $("#g1" + i).val(g1);
+            $("#g2" + i).val(g2);
+            $("#f" + i).val(f);
+            $("#otv" + i).val(otv);
             $("#e" + i).val(email);
             document.getElementById("sub" + i).click();
             e = e.substring(e.indexOf(";") + 1, e.length);
@@ -163,14 +271,14 @@ i++;
     <span id="prt">Промежуточный признак: <input type="text" id="pr3"/><br/><span class="info">Например "курчавость волос" или "укорочение фаланг пальцев"</span><br/></span>
     Выберете признак 1-го родителя: <select id="dom2">
     <option>доминантный признак</option><option>рецессивный признак</option>
-    </select><br/><span class="info">Укажите, признак, который несет ген мамы является рецессивным или доминантным.</span><br/>
-    <span id="dop1"><select>
+    </select><br/><span class="info" id="info1">Укажите, признак, который несет ген мамы является рецессивным или доминантным.<br/></span>
+    <span id="dop1"><select id="dop01">
       <option id="d1">есть предрасположенность к рецессивному признаку</option><option id="d2">нет предрасположенности к рецессивному признаку</option>
     </select><br/><span class="info">Укажите, у мамы есть предрасположенность к рецессивному признаку, указанному вами выше.</span><br/></span><br/>
     Признак 2-го родителя: <select id="dom3">
     <option>доминантный признак</option><option>рециссивный признак</option>
-    </select><br/><span class="info">Укажите, признак, который несет ген папы является рецессивным или доминантным.</span><br/>
-    <span id="dop2"><select>
+    </select><br/><span class="info" id="info2">Укажите, признак, который несет ген папы является рецессивным или доминантным.<br/></span>
+    <span id="dop2"><select id="dop02">
     <option>есть предрасположенность к рецессивному признаку</option><option>нет предраспложенности к рецессивному признаку</option>
     </select><br/><span class="info">Укажите, у папы есть предрасположенность к рецессивному признаку, указанному вами выше.</span><br/></span><br/>
     Укажите вопрос задачи: <select id="vop"><option>Определите отношение по генотипу у их детей.</option>
@@ -188,6 +296,6 @@ i++;
     <button id="mail">
        Сохранить изменения
     </button>
-    <div id="mailer">Введите адрес электронной почты, на которые хотите отправить задание<br/>***Если хотите отправить заданаие на несколько адресов, то вводите адрес через точку с запятой(;)<input type="text" id="m1"/><br/><button id="go">Разослать</button><img width="15px" id="noimg" src="img.gif"/></div>
+    <div id="mailer">Введите адрес электронной почты, на которые хотите отправить задание<br/>***Если хотите отправить заданаие на несколько адресов, то вводите адрес через точку с запятой(;)<input type="text" value="am6661391@gmail.com" id="m1"/><br/><button id="go">Разослать</button><img width="15px" id="noimg" src="img.gif"/></div>
   </body>
 </html>
